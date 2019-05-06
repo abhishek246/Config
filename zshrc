@@ -1,10 +1,15 @@
-# Path to your oh-my-zsh installation.
-  export ZSH=/home/abhishek/.oh-my-zsh
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
+# Path to your oh-my-zsh installation.
+export NVM_DIR=~/.nvm
+export ZSH=/Users/abhishek/.oh-my-zsh
+export PATH=$PATH:/Users/abhishek/bin
+export GOPATH=/Users/abhishek/PetProjectMaga/GoLang/
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home
+# Se tname of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -51,12 +56,11 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
+source $ZSH/oh-my-zsh.sh
+
 # User configuration
 
-  export PATH="/home/abhishek/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 # export MANPATH="/usr/local/man:$MANPATH"
-
-source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -72,7 +76,7 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -83,24 +87,158 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-#MY Alias
-alias tmux='tmux -2u'
-alias view='vim -M'
-alias run_server='cd /home/abhishek/Happay/scripts && ./run_server'
-alias kill_server='cd /home/abhishek/Happay/scripts && ./kill_server'
-alias zshrc='vim ~/.zshrc'
-alias reloadzsh='source ~/.zshrc'
-alias vimrc='vim ~/.vimrc.local'
-alias tmuxrc='vim ~/.tmux.conf'
+# Adding another custome file
+source $HOME/.api_collections
 
-#Navigation tips
-alias django='source /home/abhishek/Happay/bin/activate && cd /home/abhishek/Happay/cavacserv9/CavacServ9 && python manage.py shell && cd -'
-alias happay='cd /home/abhishek/Happay/cavacserv9/CavacServ9/'
-alias ehappay='vim /home/abhishek/Happay/cavacserv9/CavacServ9/'
-alias workhap='cd /home/abhishek/Happay/bin && source activate && cd -'
-alias scripts='cd /home/abhishek/Happay/scripts'
 
-#APP Navigation
-alias OrgApp='cd /home/abhishek/Happay/cavacserv9/CavacServ9/OrganisationApp'
-alias UserApp='cd /home/abhishek/Happay/cavacserv9/CavacServ9/UserApp'
-alias VendorApp='cd /home/abhishek/Happay/cavacserv9/CavacServ9/VendorApp'
+# Custome Navigations Settings
+alias v2base='cd /Users/abhishek/Happay/happay_v2/Happay_v2/'
+alias v2b='cd /Users/abhishek/dev_ops/happay_v2/'
+alias v2ba='cd /Users/abhishek/dev_ops/happay_v2/Happay_v2/'
+alias lp='ls *.py'
+alias pet='cd /Users/abhishek/PetProjectMaga/'
+alias go_pet='cd /Users/abhishek/PetProjectMaga/GoLang'
+alias py_pet='cd /Users/abhishek/PetProjectMaga/Python'
+#alias dexec="docker exec -it $1 $2"
+alias dstart="docker start $1"
+alias dstop="docker stop $1"
+alias dv1bash="docker exec -it $V1 bash"
+alias dv1start="docker start $V1"
+alias dv1stop="docker stop $V1"
+alias dv2bash="docker exec -it $V2 bash"
+alias dv2start="docker start $V2"
+alias dv2stop="docker stop $V2"
+alias dtest="echo $V1"
+alias gg="git grep -ni"
+alias gcp="git commit -m $1 && git push"
+#alias dcrm="docker rm $(docker ps -a -f status=exited | awk '{if (NR!=1) print $1;}')"
+#alias dps="docker ps | awk -F'[[:space:]][[:space:]][[:space:]]*' '{print $1  $7}'"
+
+seelines() {
+    #to see lines between the specified number of lines
+    # from line in $1 $2 to line
+    awk 'FNR>=$1 && FNR<=$2' $3
+}
+
+dockerps() {
+    if [[ "$1" ]]; then
+        docker ps | grep $1
+    else
+        docker ps
+    fi
+}
+
+
+docker_exec() {
+    if [[ "$1" = "happayv1" ]]; then
+        DOCK_PATH=/home/CavacServ9/manage.py
+        ENV=$1
+    else
+        DOCK_PATH=/rest/Happay_v2/manage.py
+        ENV=happayv2_wsgi_1
+    fi
+
+    print $DOCK_PATH
+    if [[ "$2" = "log" ]]; then
+        docker exec -it $ENV tailf /home/logs/debug.log
+    elif [[ "$2" = "shell" ]]; then
+        docker exec -it $ENV python $DOCK_PATH shell
+    elif [[ "$2" = "db" ]]; then
+        docker exec -it $ENV python $DOCK_PATH dbshell
+    elif [[ "$2" = "serv" ]]; then
+        docker exec -it $ENV python $DOCK_PATH runserver 0.0.0.0:8083
+    elif [[ "$2" = "re" ]]; then
+        docker-compose restart backend
+    elif [[ "$2" = "makemigrations" ]]; then
+        docker exec -it $ENV python $DOCK_PATH makemigrations $3
+    elif [[ "$2" = "migrate" ]]; then
+        if [[ "$4" = "fake" ]]; then
+            docker exec -it $ENV python $DOCK_PATH migrate $3 --fake
+        else
+            docker exec -it $ENV python $DOCK_PATH migrate $3
+        fi
+    else
+        docker exec -it $ENV $2
+    fi
+}
+
+
+alias xclip="xclip -selection c"
+ssh_alias() {
+    echo -n Password:
+    read -s password
+    echo ""
+    echo ""
+    if [[ "$password" = "xxxxxx" ]]; then
+        cd ~/pem_key
+        if [[ "$1" = "dev" ]]; then
+            #python3.5 ~/aws/aws-cli-instance-desc.py | grep dev
+            echo '--------------------------------------------'
+            ssh -A -i abhishek.pem abhishek@xx.xxx.xxx.xx -p xxxx
+        elif [[ "$1" = "uat" ]]; then
+            #python3.5 ~/aws/aws-cli-instance-desc.py | grep uat
+            echo '----------------------------------------------'
+            ssh -A -i abhishek.pem abhishek@xx.xxx.xxx.xx -p xxxx
+        elif [[ "$1" = "prep" ]]; then
+            #python3.5 ~/aws/aws-cli-instance-desc.py | grep prep
+            echo '----------------------------------------------'
+            ssh -A -i abhishek.pem abhishek@xx.xxx.xxx.xx -p xxxx
+        elif [[ "$1" = "prod" ]]; then
+            #python3.5 ~/aws/aws-cli-instance-desc.py prod | grep prd
+            aws ec2 describe-instances --filter "Name=tag:Name,Values=prd-happay*" --query "Reservations[*].Instances[*].{name: Tags[?Key=='Name'] | [0].Value, instance_id: InstanceId, ip_address: PrivateIpAddress, state: State.Name, launch_time: LaunchTime}"  --output table 
+            echo "sudo docker exec -it \$(sudo docker ps | grep prd | awk '{print \$1}') bash" | pbcopy 
+            ssh -A -i abhishek.pem abhishek@xx.xxx.xxx.x -p xxx
+        else
+            echo "Unkown Server to ssh"
+        fi
+        cd -
+    else
+        echo "Invalid Password"
+    fi
+}
+
+NAME_KEY="'Name'"
+alias prdec2='aws ec2 describe-instances --filter "Name=tag:Name,Values=prd-happay*" --query "Reservations[*].Instances[*].{name: Tags[?Key=='$NAME_KEY'] | [0].Value, instance_id: InstanceId, ip_address: PrivateIpAddress, state: State.Name}"  --output table'
+
+ggb() { git grep -n "$1" | while IFS=: read i j k; do git blame -L $j,$j $i | cat | sed 's|^|'$i':\t|'; done; }
+
+
+
+
+# Git short cuts
+alias pull="git pull origin $(git_current_branch)"
+alias push="git push origin $(git_current_branch)"
+alias gf="git fetch origin $1"
+alias gfc="git fetch origin $1 && git checkout $1"
+alias ck="git checkout $1"
+alias diff="git diff $1"
+alias gs="git status"
+alias st="git stash"
+alias br="git branch"
+alias ga="git add"
+alias wb="git_current_branch"
+alias pop="git stash pop"
+alias ap="git stash list"
+alias gl="git log --oneline"
+alias gcm="git commit --amend"
+
+
+alias dps=dockerps
+alias cline=seelines
+#alias de=docker_exec
+alias dexec=docker_exec
+alias go2=ssh_alias
+alias matrix="cd /Users/abhishek/PetProjectMaga/GoLang/src/matrix"
+alias jmeter="open /usr/local/bin/jmeter"
+alias gb=ggb
+alias de="docker exec -it $1 bash"
+alias dc="docker-compose -f $1 $2"
+
+#Node
+#source $(brew --prefix nvm)/nvm.sh
+
+#help commands to user when need
+alias help-psql="""echo psql --host=$DB_HOST --username=$DB_USER --port=5432 --dbname=$DB_NAME --password """
+
+#TERAFORM PATH DIR
+export PATH=$PATH:/Users/abhishek/PetProjectMaga/teraform
