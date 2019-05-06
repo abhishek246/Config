@@ -1,0 +1,265 @@
+" Abhishek k Editor 2017
+set nocompatible              " required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+"Vim Scripts
+Plugin 'vim-scripts/indentpython.vim'
+" Folding for Python Files
+Plugin 'tmhedberg/SimpylFold'
+" Python Syntax
+Plugin 'nvie/vim-flake8'
+" Python Git Verything in side a Vim - 1-Jun-2017 11:45 PM
+Plugin 'tpope/vim-fugitive'
+" AirLine Vim for Tabs
+Plugin 'vim-airline/vim-airline'
+" Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
+Plugin 'scrooloose/nerdtree'
+
+"Go Vim plugin for programiing in vim
+Plugin 'fatih/vim-go'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+"Finally after tearing my hair apart
+"to find what is world is <leader> in
+"every once rc files understood it
+"-------------------------------
+"leader is key prefix that is set
+"what is you leader setting 
+":echo mapleader / :let mapleader
+"----------------------------
+"Undefined variable: mapleader
+"Invalid expression: mapleader
+"if you get above output that means 
+"your leader is not set
+" set your leader with following
+" command
+let mapleader="," 
+
+set encoding=utf-8
+
+" Search test highligthing
+set hlsearch
+
+" Folding for python 
+set foldmethod=indent
+set foldlevel=5
+
+" Fold All indent on open of file
+autocmd BufRead * setlocal foldmethod=marker
+autocmd BufRead * normal zM
+
+" Folding with Space bar
+nnoremap <space> za
+
+
+" Tab Spacing
+"au BufNewFile,BufRead *.py
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set textwidth=79
+set expandtab
+set autoindent
+set fileformat=unix
+
+"this is used to move between
+"buffers with saving a buffer
+set hidden
+
+" The following commands tells vim not to create
+" swap file even though the vim documentation
+" say this files will help recover the when file 
+set nobackup
+set nowritebackup
+set noswapfile
+
+
+" Python highlight 
+let python_highlight_all=1
+syntax on
+
+"Line Number
+set nu
+
+"Setting Clipboard
+"set clipboard=unnamed
+
+"Spelling mistake highlighting
+"I make a lot of spelling mistakes
+setlocal spell spelllang=en_gb
+
+
+"Color Scheme
+"let g:molokai_original = 1
+colorscheme molokai
+
+" Split Navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+"Airline Vim 
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+"Airline status line looks ugly
+"let g:airline_symbols = {}
+"let g:airline_symbols.branch = '' "Branch icon for status line
+"set laststatus=2 "The following line displays the airline status bar at the bottom
+
+"Buffer Navigation
+nmap <S-q> :bprevious<CR>
+nmap <S-w> :bnext<CR>
+nmap <S-D> :bdelete<CR>
+nmap <S-z> :set paste<CR>
+
+"Open File In the Same line as when you closed it
+" Makes file Opening Slow not very comfertable to use it
+au BufWinLeave * mkview
+au BufWinEnter * silent loadview
+
+"autocmd vimenter * NERDTree
+
+"NerdTree Ignore files
+let NERDTreeIgnore = ['\.pyc$']
+nmap <C-e> :NERDTreeToggle<CR>
+
+" Conflicting natural behavior of vim
+" Hence Removed - AB 8-JAN-2019
+"let cwd = getcwd()
+"nmap <S-v> :vsplit <CR> 
+"use: vsplit
+noremap <leader>s <C-W>s
+noremap <leader>v <C-W>v
+
+"Crtl - p file search
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+"Snippts that help to complete by most used code like log and debugger
+Plugin 'SirVer/ultisnips'
+
+"Snippts Trigger configuration
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsSnippetDirectories = ['~/.vim/ft', 'ft']
+let g:UltiSnipsEditSplit="vertical"
+
+"Highlight 80 Column to keep the code 
+" set colorcolumn=80
+highlight ColorColumn ctermbg=gray
+set colorcolumn=80
+
+" Following lines will line 
+" will wrap the text with 
+" respect to there other half
+"inoremap " ""<left>
+"inoremap ' ''<left>
+"inoremap ( ()<left>
+"inoremap [ []<left>
+"inoremap { {}<left>
+"inoremap {<CR> {<CR>}<ESC>O
+"inoremap {;<CR> {<CR>};<ESC>O
+
+" Reach defanation of the functions or
+" class
+set tags=./tags;/
+
+" Shortcut for the things
+
+nmap <leader>gb :Gblame
+
+
+
+" --------------- Go Development requriment for Vim --------------------
+" TODO: please clean this keep things that is need
+" for development and remove the rest of comment
+" for future reference... 
+" source: https://github.com/fatih/vim-go-tutorial/blob/master/vimrc
+" not sure if this required only problem facing with go code other
+" than ide is auto imports go or bad!!!
+" vim-go
+
+let g:go_fmt_command = "goimports"
+let g:go_autodetect_gopath = 1
+let g:go_list_type = "quickfix"
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_generate_tags = 1
+
+" Open :GoDeclsDir with ctrl-g
+nmap <C-g> :GoDeclsDir<cr>
+imap <C-g> <esc>:<C-u>GoDeclsDir<cr>
+
+
+augroup go
+  autocmd!
+
+  " Show by default 4 spaces for a tab
+  autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+
+  " :GoBuild and :GoTestCompile
+  autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+
+  " :GoTest
+  autocmd FileType go nmap <leader>t  <Plug>(go-test)
+
+  " :GoRun
+  autocmd FileType go nmap <leader>r  <Plug>(go-run)
+
+  " :GoDoc
+  autocmd FileType go nmap <leader>d <Plug>(go-doc)
+
+  " :GoCoverageToggle -- Im using this as much
+  " autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+
+  " :GoInfo
+  autocmd FileType go nmap <Leader>i <Plug>(go-info)
+
+  " :GoMetaLinter
+  autocmd FileType go nmap <Leader>l <Plug>(go-metalinter)
+
+  " :GoDef but opens in a vertical split - AB already 
+  " have better short cuts for the same
+  " autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
+
+  " :GoDef but opens in a horizontal split -- Same as above
+  " autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
+
+  " :GoAlternate  commands :A, :AV, :AS and :AT
+  "autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  "autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  "autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  "autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+  " All of the above are not need as the same can accomplished by Shit-Q and Shit-W 
+augroup END
+
+" build_go_files is a custom function that builds or compiles the test file.
+" It calls :GoBuild if its a Go file, or :GoTestCompile if it's a test file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
