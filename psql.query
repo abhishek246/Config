@@ -1,0 +1,7 @@
+
+
+# see running queries in psql
+select pid, query from pg_stat_activity;
+
+#terminate a query
+select pg_terminate_backend(<pid>);
