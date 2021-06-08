@@ -92,13 +92,6 @@ source $HOME/.api_collections
 
 
 # Custome Navigations Settings
-alias v2base='cd /Users/abhishek/Happay/happay_v2/Happay_v2/'
-alias v2b='cd /Users/abhishek/dev_ops/happay_v2/'
-alias v2ba='cd /Users/abhishek/dev_ops/happay_v2/Happay_v2/'
-alias lp='ls *.py'
-alias pet='cd /Users/abhishek/PetProjectMaga/'
-alias go_pet='cd /Users/abhishek/PetProjectMaga/GoLang'
-alias py_pet='cd /Users/abhishek/PetProjectMaga/Python'
 #alias dexec="docker exec -it $1 $2"
 alias dstart="docker start $1"
 alias dstop="docker stop $1"
@@ -130,12 +123,12 @@ dockerps() {
 
 
 docker_exec() {
-    if [[ "$1" = "happayv1" ]]; then
-        DOCK_PATH=/home/CavacServ9/manage.py
+    if [[ "$1" = "a" ]]; then
+        DOCK_PATH=/home/a/manage.py
         ENV=$1
     else
-        DOCK_PATH=/rest/Happay_v2/manage.py
-        ENV=happayv2_wsgi_1
+        DOCK_PATH=/rest/a/manage.py
+        ENV=abhis_v2_wsgi_1
     fi
 
     print $DOCK_PATH
@@ -185,7 +178,7 @@ ssh_alias() {
             ssh -A -i abhishek.pem abhishek@xx.xxx.xxx.xx -p xxxx
         elif [[ "$1" = "prod" ]]; then
             #python3.5 ~/aws/aws-cli-instance-desc.py prod | grep prd
-            aws ec2 describe-instances --filter "Name=tag:Name,Values=prd-happay*" --query "Reservations[*].Instances[*].{name: Tags[?Key=='Name'] | [0].Value, instance_id: InstanceId, ip_address: PrivateIpAddress, state: State.Name, launch_time: LaunchTime}"  --output table 
+            aws ec2 describe-instances --filter "Name=tag:Name,Values=prd-*" --query "Reservations[*].Instances[*].{name: Tags[?Key=='Name'] | [0].Value, instance_id: InstanceId, ip_address: PrivateIpAddress, state: State.Name, launch_time: LaunchTime}"  --output table 
             echo "sudo docker exec -it \$(sudo docker ps | grep prd | awk '{print \$1}') bash" | pbcopy 
             ssh -A -i abhishek.pem abhishek@xx.xxx.xxx.x -p xxx
         else
@@ -198,7 +191,7 @@ ssh_alias() {
 }
 
 NAME_KEY="'Name'"
-alias prdec2='aws ec2 describe-instances --filter "Name=tag:Name,Values=prd-happay*" --query "Reservations[*].Instances[*].{name: Tags[?Key=='$NAME_KEY'] | [0].Value, instance_id: InstanceId, ip_address: PrivateIpAddress, state: State.Name}"  --output table'
+alias prdec2='aws ec2 describe-instances --filter "Name=tag:Name,Values=prd-*" --query "Reservations[*].Instances[*].{name: Tags[?Key=='$NAME_KEY'] | [0].Value, instance_id: InstanceId, ip_address: PrivateIpAddress, state: State.Name}"  --output table'
 
 ggb() { git grep -n "$1" | while IFS=: read i j k; do git blame -L $j,$j $i | cat | sed 's|^|'$i':\t|'; done; }
 
